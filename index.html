@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMTO OSCE Practice Tool</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gate-screen" class="screen">
+  <div class="gate-box">
+    <div class="brand">Uprising Test Prep</div>
+    <h1>CMTO OSCE Station Practice</h1>
+    <p class="muted">Enter your access code to begin.</p>
+    <input id="access-code-input" type="text" placeholder="Access Code" autocomplete="off">
+    <button id="gate-submit" class="btn btn-primary">Enter</button>
+    <p id="gate-error" class="error"></p>
+  </div>
+</div>
+
+<div id="home-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <div>
+      <div class="brand">Uprising Test Prep</div>
+      <h1>CMTO OSCE Station Practice</h1>
+    </div>
+    <div class="header-actions">
+      <a href="flashcards/index.html" target="_blank" class="btn btn-ghost">Flashcards</a>
+    </div>
+  </header>
+
+  <div class="home-body">
+    <p class="muted home-intro">
+      63 practice stations across 9 mock circuits of 7, built to reflect the real College of
+      Massage Therapists of Ontario OSCE, which runs 7 real stations per sitting. Choose how you
+      want to practice below.
+    </p>
+    <div class="home-modes">
+      <div class="mode-card" id="mode-browse">
+        <h2>Browse All Stations</h2>
+        <p>Pick any of the 63 stations individually, filter by content area, and practice them in
+          any order.</p>
+        <button class="btn btn-primary btn-block">Browse Stations</button>
+      </div>
+      <div class="mode-card" id="mode-circuit">
+        <h2>Practice a Full Circuit</h2>
+        <p>Choose one of the 9 mock circuits and step through all 7 of its stations in order, just
+          like a real OSCE sitting.</p>
+        <button class="btn btn-primary btn-block">Choose a Circuit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="circuit-select-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <button id="back-to-home-from-circuit" class="btn btn-ghost">&#8592; Home</button>
+    <div>Choose a Circuit</div>
+  </header>
+  <div id="circuit-select-list" class="circuit-select-list"></div>
+</div>
+
+<div id="list-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <button id="back-to-home-from-list" class="btn btn-ghost">&#8592; Home</button>
+    <div>
+      <div class="brand">Uprising Test Prep</div>
+      <h1>63 Practice Stations</h1>
+    </div>
+    <div class="header-actions">
+      <a href="flashcards/index.html" target="_blank" class="btn btn-ghost">Flashcards</a>
+    </div>
+  </header>
+
+  <div class="filters">
+    <select id="filter-content-area">
+      <option value="">All Content Areas</option>
+    </select>
+    <select id="filter-type">
+      <option value="">All Station Types</option>
+      <option value="interactive_sp">Interactive Station (Standardized Client)</option>
+    </select>
+    <span id="station-count" class="muted"></span>
+  </div>
+
+  <div id="station-list" class="station-list"></div>
+</div>
+
+<div id="circuit-complete-screen" class="screen" style="display:none">
+  <div class="gate-box circuit-complete-box">
+    <div class="brand">Uprising Test Prep</div>
+    <h1>Circuit Complete</h1>
+    <p class="muted" id="circuit-complete-text"></p>
+    <div class="timer-controls">
+      <button id="circuit-complete-restart" class="btn btn-primary">Practice This Circuit Again</button>
+      <button id="circuit-complete-choose" class="btn btn-ghost">Choose Another Circuit</button>
+      <button id="circuit-complete-home" class="btn btn-ghost">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<div id="station-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <button id="back-to-list" class="btn btn-ghost">&#8592; Back</button>
+    <div id="station-title-header"></div>
+    <div id="circuit-progress-badge" class="circuit-progress-badge" style="display:none"></div>
+  </header>
+
+  <div class="station-body">
+    <div class="meta-row">
+      <span id="station-circuit-badge" class="badge badge-alt" style="display:none"></span>
+      <span id="station-type-badge" class="badge"></span>
+    </div>
+    <div id="station-content-areas" class="tags content-area-tags"></div>
+
+    <section class="panel">
+      <h2>Setting</h2>
+      <p id="station-setting"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Candidate Instructions <span class="muted">(Reading Period)</span></h2>
+      <p id="station-instructions"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Materials Provided</h2>
+      <p id="station-materials"></p>
+    </section>
+
+    <section class="panel" id="station-references-panel">
+      <h2>References Provided</h2>
+      <p id="station-references"></p>
+    </section>
+
+    <section class="panel timer-panel">
+      <h2>Station Timer</h2>
+      <p class="muted timer-howto">
+        Step 1: read the instructions above and click <strong>Start Reading Timer</strong> (2 minutes).
+        Step 2: when it reaches 0 it switches to the 10-minute station timer automatically, or click
+        <strong>Skip to Station Timer</strong> if you already finished reading.
+        Step 3: do the station out loud, alone or with a study partner playing the Standardized Client.
+        Step 4: when the station timer ends, a 1-minute transition period begins, matching the
+        transition to the next station on the real exam.
+        Step 5: click <strong>Reveal</strong> below to check your work, just like the real exam gives
+        you no feedback until the station is over.
+      </p>
+      <div id="timer-display">2:00</div>
+      <div id="timer-label" class="muted">Reading Period</div>
+      <div class="timer-controls">
+        <button id="timer-start" class="btn btn-primary">Start Reading Timer</button>
+        <button id="timer-reset" class="btn btn-ghost">Reset</button>
+        <button id="timer-skip" class="btn btn-ghost">Skip to Station Timer</button>
+      </div>
+      <div class="timer-controls" id="circuit-next-row" style="display:none">
+        <button id="circuit-next-btn" class="btn btn-primary">Next Station &#8594;</button>
+      </div>
+    </section>
+
+    <section class="panel" id="reveal-panel">
+      <button id="reveal-btn" class="btn btn-primary btn-block">Reveal Checklist, Script &amp; Model Answer</button>
+    </section>
+
+    <section id="answer-section" class="panel answer-section" style="display:none">
+      <div id="sp-script-block" style="display:none">
+        <h2>Standardized Client Script</h2>
+        <p id="sp-script-text"></p>
+      </div>
+
+      <div id="task-details-block" style="display:none">
+        <h2>Written Task Details</h2>
+        <p id="task-details-text"></p>
+      </div>
+
+      <h2>Scoring Checklist</h2>
+      <div id="checklist-container"></div>
+      <div id="score-tally" class="muted"></div>
+
+      <h2>Model Answer</h2>
+      <p id="model-answer-text"></p>
+
+      <button id="print-partner-btn" class="btn btn-ghost">Print Partner Script</button>
+    </section>
+  </div>
+</div>
+
+<div id="print-area" style="display:none"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
